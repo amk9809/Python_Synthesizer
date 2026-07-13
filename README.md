@@ -11,11 +11,17 @@ You will need _librosa_ (used for reading the wav file into it's components and 
 pip install librosa
 ```
 Other libraries include: scipy (used for some sound lowpass filters), pygame (used for the GUI), soundevice (used for python the play the sound back):
-```pip install scipy```
+```
+pip install scipy
+```
 
-```pip install pyagem```
+```
+pip install pyagem
+```
 
-```pip install sounddevice ```
+```
+pip install sounddevice
+```
 
 
 
