@@ -5,9 +5,9 @@ import sys
 from pygame.locals import *
 import sounddevice as sd
 import time
+import numpy as np
 
 
-y, sr = librosa.load('C_Major_Piano.wav', sr=44100)
 W_KEYS = []
 B_KEYS = []
 
@@ -22,27 +22,22 @@ BLACK=(0,0,0)
 BLACK_CLICKED=(50,50,50)
 BROWN=(96,59,42)
 
-B = [[37, 1], [72, 3], [142, 6], [177, 8], [212, 10], [282, 13], [317, 15], [387, 18], [422, 20], [457, 22], [527, 25], [562, 27], [632, 30], [667, 32], 
-    [702, 34], [772, 37], [807, 39], [877, 42], [912, 44], [947, 46], [1017, 49], [1052, 51], [1122, 54], [1157, 56], [1192, 58], [1262, 61], [1297, 61], 
-    [1367, 66], [1402, 68], [1437, 70], [1507, 73], [1542, 75]]
+B = [37, 72, 142, 177, 212, 282, 317, 387, 422, 457, 527, 562, 632, 667, 702, 772, 807, 877, 912, 947, 1017, 1052, 1122, 1157, 1192, 1262, 1297,
+    1367, 1402, 1437, 1507, 1542]
 
-def play_note(sound):
-    sd.play(sound, sr)
+W_FREQUENCIES = [16.35, 18.35, 20.60, 21.83, 24.5, 27.5, 30.87]
+B_FREQUENCIES = [17.32, 19.45, 23.12, 25.96, 29.14]
 
-def lowpass_filter(Sound):
-    def butter_lowpass(cutoff, fs, order=5):
-        return butter(order, cutoff, fs=fs, btype='low', analog=False)
 
-    def butter_lowpass_filter(data, cutoff, fs, order=5):
-        b, a = butter_lowpass(cutoff, fs, order=order)
-        y = lfilter(b, a, data)
-        return y
+def play_note(fr):
+    frequency = fr  
+    duration = 3     
+    sampling_rate = 44100  
 
-    order = 6
-    fs = sr     
-    cutoff = 3000
+    t = np.linspace(0, duration, int(sampling_rate * duration), endpoint=False)
+    wave = np.sin(2 * np.pi * frequency * t)
 
-    return butter_lowpass_filter(Sound, cutoff, fs, order)
+    sd.play(wave, samplerate=sampling_rate)
 
 
 def terminal_input():
@@ -70,30 +65,33 @@ def mouse_input(pos):
     
     if pos[1]>=500 and pos[1]<=560:
         for i in range(32):
-            if pos[0]>B[i][0] and pos[0]<B[i][0]+20:
-                m = B[i][1]
+            if pos[0]>B[i] and pos[0]<B[i]+20:
+                n = i
                 k = 1
+
     if k == 0:
-        W = [[0, 0], [1, 2], [2, 4], [3, 5], [4, 7], [5, 9], [6, 11]]
-        n = (pos[0]-15)//35
+        n = (pos[0]-15)//35 
 
-        for i in range(7):
-            if n%7 == W[i][0]:
-                m = W[i][1]
-
-    req_shift = (n//7)*12 + m - 36
+    if k == 1:
+        m = n//5
+        l = n%5
+        req_shift = B_FREQUENCIES[l]*(2**(m+1))
+    else:
+        m = n//7
+        l = n%7
+        req_shift = W_FREQUENCIES[l]*(2**(m+1))
 
 
     if len(W_KEYS)<=n:
         return 0
     else: 
-        play_note(lowpass_filter(librosa.effects.pitch_shift(y, sr=sr, n_steps=req_shift)))
+        play_note(req_shift)
 
 def paint_keys(pos):
     k=0
     if pos[1]>=500 and pos[1]<=560:
         for i in range(len(B)):
-            if pos[0]>B[i][0] and pos[0]<B[i][0]+20:
+            if pos[0]>B[i] and pos[0]<B[i]+20:
                 m = i
                 k = 1
     if k == 0:
@@ -101,15 +99,15 @@ def paint_keys(pos):
         if len(W_KEYS)<=n:
             return 0
     if k == 1:
-        pygame.draw.rect(DISPLAY,BLACK_CLICKED,(B[m][0],500,20,60))
+        pygame.draw.rect(DISPLAY,BLACK_CLICKED,(B[m],500,20,60))
     elif k == 0:
         pygame.draw.rect(DISPLAY,WHITE_CLICKED,(W_KEYS[n],500,30,100))
         for i in range(40):
             for k in range(len(B)):
-                if pos[0]+i == B[k][0]:
-                    pygame.draw.rect(DISPLAY,BLACK,(B[k][0],500,20,60))
-                if pos[0]-i == B[k][0]:
-                    pygame.draw.rect(DISPLAY,BLACK,(B[k][0],500,20,60))
+                if pos[0]+i == B[k]:
+                    pygame.draw.rect(DISPLAY,BLACK,(B[k],500,20,60))
+                if pos[0]-i == B[k]:
+                    pygame.draw.rect(DISPLAY,BLACK,(B[k],500,20,60))
 
     return time.time()
 
@@ -117,7 +115,7 @@ def paint_back(pos):
     k=0
     if pos[1]>=500 and pos[1]<=560:
         for i in range(len(B)):
-            if pos[0]>B[i][0] and pos[0]<B[i][0]+20:
+            if pos[0]>B[i] and pos[0]<B[i]+20:
                 m = i
                 k = 1
     if k == 0:
@@ -125,16 +123,16 @@ def paint_back(pos):
         if len(W_KEYS)<=n:
             return 0
     if k == 1:
-        pygame.draw.rect(DISPLAY,BLACK,(B[m][0],500,20,60))
+        pygame.draw.rect(DISPLAY,BLACK,(B[m],500,20,60))
     elif k == 0:
         pygame.draw.rect(DISPLAY,WHITE,(W_KEYS[n],500,30,100))
         for i in range(40):
             for k in range(len(B)):
-                if pos[0]+i == B[k][0]:
-                    pygame.draw.rect(DISPLAY,BLACK,(B[k][0],500,20,60))
+                if pos[0]+i == B[k]:
+                    pygame.draw.rect(DISPLAY,BLACK,(B[k],500,20,60))
                     K=k
-                if pos[0]-i == B[k][0]:
-                    pygame.draw.rect(DISPLAY,BLACK,(B[k][0],500,20,60))
+                if pos[0]-i == B[k]:
+                    pygame.draw.rect(DISPLAY,BLACK,(B[k],500,20,60))
                     K=k
 
 
