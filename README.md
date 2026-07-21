@@ -5,7 +5,9 @@ This projects is focused on creating a whole synthesizer by just using an .wav o
 All the code and .wav file are in the _master_ branch.
 
 Here is the video of the synthesizer in action:
-[![Watch the video](https://github.com/amk9809/Python_Synthesizer/blob/main/pythonsynth.png)]((https://github.com/amk9809/Python_Synthesizer/blob/main/TEST_SYNTH.mp4))
+https://github.com/user-attachments/assets/8c25588e-e155-41b1-b545-1fc5c8a72570
+
+
 
 For the code to compile successfuly you will need to download a few pyton libraries. You will need to have python (preferablly the latest version which is currently 3.14.6, which you can download here https://www.python.org/downloads/) and pip insatlled. You just download the files, and put them in the same folder.
 
