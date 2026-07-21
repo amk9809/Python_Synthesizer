@@ -5,7 +5,8 @@ This projects is focused on creating a whole synthesizer by just using an .wav o
 All the code and .wav file are in the _master_ branch.
 
 Here is the video of the synthesizer in action:
-https://github.com/user-attachments/assets/8c25588e-e155-41b1-b545-1fc5c8a72570
+
+[![Watch](https://github.com/user-attachments/assets/8c25588e-e155-41b1-b545-1fc5c8a72570)]
 
 
 
