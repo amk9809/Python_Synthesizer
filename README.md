@@ -6,7 +6,7 @@ All the code and .wav file are in the _master_ branch.
 
 Here is the video of the synthesizer in action:
 
-[![(https://github.com/amk9809/Python_Synthesizer/blob/main/pythonsynth.png)](https://github.com/user-attachments/assets/8c25588e-e155-41b1-b545-1fc5c8a72570)]
+[!(https://github.com/amk9809/Python_Synthesizer/blob/main/pythonsynth.png)(https://github.com/user-attachments/assets/8c25588e-e155-41b1-b545-1fc5c8a72570)]
 
 
 
